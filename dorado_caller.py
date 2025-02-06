@@ -57,7 +57,7 @@ def basecallinganddemuxing():
             else:
                 basecaller_command = "dorado basecaller "
 
-            basecaller_command += f"--min-qscore {qscore} --device {deviceType} /Users/akhilpeddikuppa/dorado_models/dna_r10.4.1_e8.2_400bps_{acc}@v5.0.0 {pod5Dir} "
+            basecaller_command += f"--min-qscore {qscore} --device {deviceType} ../dorado_models/dna_r10.4.1_e8.2_400bps_{acc}@v5.0.0 {pod5Dir} "
             if(output.endswith("fastq")):
                 basecaller_command += "--emit-fastq "
             if reference == "":
