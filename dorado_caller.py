@@ -44,7 +44,12 @@ def basecallinganddemuxing():
     reference = st.text_input("Enter path to your fasta reference file (optional)")
     moves = st.radio("Emit moves table?", ["Yes", "No"])
     output = st.text_input("Output file name (include extension .bam or .fastq)")
-    if(output.endswith('.fastq') != True):
+    
+    # Initialize map0 and unmapped with default values
+    map0 = "No"
+    unmapped = "No"
+    
+    if not output.endswith('.fastq'):
         map0 = st.radio("Remove mapped reads with score of 0?", ["Yes", "No"])
         unmapped = st.radio("Remove unmapped reads?", ["Yes", "No"])
 
@@ -76,7 +81,7 @@ def basecallinganddemuxing():
                     st.error("Basecalling failed!")
                     return
 
-            if(map0.lower() == "Yes" and output.endswith('.fastq') != True):
+            if(map0.lower() == "Yes" and not output.endswith('.fastq')):
                 st.subheader("Processing mapped reads")
                 map0_command = f"samtools view -b -q 1 {output} > {output}_map0.bam"
                 st.code(map0_command, language="bash")
@@ -84,7 +89,7 @@ def basecallinganddemuxing():
                     run_command(map0_command)
                 output = f"{output}_map0"
             
-            if(unmapped.lower() == "Yes" and output.endswith('.fastq') != True):
+            if(unmapped.lower() == "Yes" and not output.endswith('.fastq')):
                 st.subheader("Processing unmapped reads")
                 if(map0.lower() == "Yes"):
                     unmapped_command = f"samtools view -F 4 -b {output}.bam > {output}_unmapped_remove.bam"
